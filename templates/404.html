@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ой! Ошибка 404</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="logo">🎁 WishWave</div>
+</header>
+
+<div class="container error-container">
+    <h1 class="error-code">404</h1>
+    <p class="error-msg">Упс! Кажется, такой страницы не существует.</p>
+    <p>Возможно, подарок уже кто-то забрал или ссылка ведет в никуда.</p>
+
+    <a href="/" class="price-btn">
+        Вернуться на главную
+    </a>
+</div>
+
+</body>
+</html>

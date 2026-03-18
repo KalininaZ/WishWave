@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>WishWave - Список желаний</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="logo">🎁 WishWave</div>
+    <nav>ГЛАВНАЯ &nbsp; КАТАЛОГ &nbsp; ДОСТАВКА</nav>
+</header>
+
+<div class="container">
+    <p class="intro">
+        Каждый раз ломаешь голову, что подарить близким? Или устал получать бесполезные наборы?
+        Wish List решает эту проблему. Здесь каждый создает свой список желаний, а вы просто выбираете подарок.
+    </p>
+
+    <!-- Форма добавления -->
+    <div class="add-box">
+        <h3>Добавить новый подарок</h3>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Название (например, Плед 'Уют')" required>
+            <input type="number" name="price" placeholder="Цена(₽)" required min="0" step="1">
+            <input type="text" name="link" placeholder="Ссылка на магазин">
+            <input type="text" name="image_url" placeholder="Ссылка на картинку товара">
+            <textarea name="description" placeholder="Краткое описание (размер, цвет...)"></textarea>
+            <select name="status">
+                <option>Хочу</option>
+                <option>Куплено</option>
+                <option>В пути</option>
+            </select>
+            <button type="submit">Добавить в список</button>
+        </form>
+    </div>
+
+    <h2 style="letter-spacing: 3px; font-weight: 300; margin-bottom: 30px;">ПОПУЛЯРНЫЕ ПРЕДЛОЖЕНИЯ</h2>
+
+    <div class="grid">
+        {% for wish in wishes %}
+        <div class="card">
+            <div class="card-img-container">
+                <!-- Если ссылки нет, покажем картинку по умолчанию -->
+                <img src="{{ wish['image_url'] if wish['image_url'] else 'https://img.freepik.com/free-photo/cute-teddy-bear-isolated-white-background_1101-27.jpg' }}" alt="Gift">
+            </div>
+            <h3>{{ wish['name'] }}</h3>
+            <p>{{ wish['description'] }}</p>
+            <div class="status-label">
+                <form action="/update_status/{{ wish['id'] }}" method="POST" style="margin: 0;">
+                    <select name="status" onchange="this.form.submit()" class="status-select">
+                        <option value="Хочу" {% if wish['status'] == 'Хочу' %}selected{% endif %}>Хочу</option>
+                        <option value="Куплено" {% if wish['status'] == 'Куплено' %}selected{% endif %}>Куплено</option>
+                        <option value="В пути" {% if wish['status'] == 'В пути' %}selected{% endif %}>В пути</option>
+                    </select>
+                </form>
+            </div>
+
+            <a href="{{ wish['link'] }}" class="price-btn" target="_blank"> {{ wish['price'] }} ₽ </a>
+
+            <a href="/delete/{{ wish['id'] }}" class="del-btn" onclick="return confirm('Удалить?')">удалить из списка</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Большая кнопка как на фото -->
+    <a href="#" class="big-cta">Перейти к покупкам</a>
+</div>
+
+</body>
+</html>
